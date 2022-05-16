@@ -59,6 +59,7 @@ namespace Web_Auto_Fill_Tool
             (cfgTb, userData, ret) = ReadExcel(excelFullPath);
             if (ret != Def.RET_SUCCESS)
             {
+                ShowBottomHint(ret);
                 return;
             }
 
@@ -160,22 +161,22 @@ namespace Web_Auto_Fill_Tool
                 return Def.EXCEL_READ_RET_EMPTY_CFG_SHEET;
             }
 
-            ISheet userDataSheet = workbook.GetSheetAt(1);
-            if (userDataSheet == null)
-            {
-                return Def.EXCEL_READ_RET_MISSING_USERDATA_SHEET;
-            }
-            rowNum = userDataSheet.LastRowNum;
-            if (rowNum == 0)
-            {
-                return Def.EXCEL_READ_RET_EMPTY_USERDATA_SHEET;
-            }
-            fields = sheet.GetRow(0);
-            colNum = fields.LastCellNum;
-            if (colNum == 0)
-            {
-                return Def.EXCEL_READ_RET_EMPTY_USERDATA_SHEET;
-            }
+            //ISheet userDataSheet = workbook.GetSheetAt(1);
+            //if (userDataSheet == null)
+            //{
+            //    return Def.EXCEL_READ_RET_MISSING_USERDATA_SHEET;
+            //}
+            //rowNum = userDataSheet.LastRowNum;
+            //if (rowNum == 0)
+            //{
+            //    return Def.EXCEL_READ_RET_EMPTY_USERDATA_SHEET;
+            //}
+            //fields = sheet.GetRow(0);
+            //colNum = fields.LastCellNum;
+            //if (colNum == 0)
+            //{
+            //    return Def.EXCEL_READ_RET_EMPTY_USERDATA_SHEET;
+            //}
 
             return Def.RET_SUCCESS;
         }
@@ -266,24 +267,27 @@ namespace Web_Auto_Fill_Tool
             }
 
             Dictionary<string, string> userData = new Dictionary<string, string>();
-            int userRowNum = userDataSheet.LastRowNum;
-            for(int i=0;i<=userRowNum;i++)
+            if (userDataSheet != null)
             {
-                IRow userRow = userDataSheet.GetRow(i);
-
-                ICell aliasCell = userRow.GetCell(0);
-                ICell userValueCell = userRow.GetCell(1);
-                
-                if(aliasCell == null || userValueCell == null)
+                int userRowNum = userDataSheet.LastRowNum;
+                for(int i=0;i<=userRowNum;i++)
                 {
-                    continue;
+                    IRow userRow = userDataSheet.GetRow(i);
+
+                    ICell aliasCell = userRow.GetCell(0);
+                    ICell userValueCell = userRow.GetCell(1);
+                
+                    if(aliasCell == null || userValueCell == null)
+                    {
+                        continue;
+                    }
+
+                    string aliasKey = GetCellValue(aliasCell);
+                    string userValue = GetCellValue(userValueCell);
+                    userData.Add(aliasKey, userValue);
                 }
-
-                string aliasKey = GetCellValue(aliasCell);
-                string userValue = GetCellValue(userValueCell);
-                userData.Add(aliasKey, userValue);
             }
-
+                
             return (cfgTb, userData, Def.RET_SUCCESS);
         }
 

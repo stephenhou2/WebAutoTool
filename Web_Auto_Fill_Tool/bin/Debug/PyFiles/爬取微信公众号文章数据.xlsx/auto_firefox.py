@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from time import sleep
 from selenium.webdriver.support import expected_conditions as EC
 
-s = Service('C:/Users/Administrator/Desktop/Web_Auto_Fill_Tool/Web_Auto_Fill_Tool/bin/Debug/Drivers/geckodriver')
+s = Service('C:/Users/Administrator/Desktop/WebAutoTool/Web_Auto_Fill_Tool/bin/Debug/Drivers/geckodriver')
 #打开浏览器
 dr = webdriver.Firefox(service=s)
 web_search_result = ''
@@ -23,7 +23,7 @@ err_str = ''
 #登录网址
 dr.get('https://mp.weixin.qq.com')
 
-sleep(1)
+sleep()
 
 if result == 0:
     try:
@@ -51,8 +51,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:
@@ -62,8 +62,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:
@@ -73,8 +73,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:
@@ -84,8 +84,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:
@@ -95,8 +95,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:
@@ -106,8 +106,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:
@@ -117,8 +117,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:
@@ -128,8 +128,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:
@@ -139,8 +139,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:
@@ -150,8 +150,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:
@@ -161,8 +161,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:
@@ -172,8 +172,8 @@ if result == 0:
         result -= 1 
 
 if result == 0:
-        attr = element.get_attribute('href')
-        web_search_result += '文章网页地址：{attr}\r\n'.format(attr=attr)
+    attr = element.get_attribute('href')
+    web_search_result += '文章网页地址：{attr}\r\n'.format(str=attr)
 
 if result == 0:
     try:

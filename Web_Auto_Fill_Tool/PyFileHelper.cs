@@ -9,6 +9,8 @@ namespace Web_Auto_Fill_Tool
 {
     internal class PyFileHelper
     {
+        private static string pre_tab = "";
+
         /// <summary>
         /// 生成自动化脚本
         /// </summary>
@@ -20,7 +22,7 @@ namespace Web_Auto_Fill_Tool
 
             // 目标网站地址
             string userKey = cfgTb.GetValue("ALIAS_KEY", 0);
-            string key = cfgTb.GetValue("KEY", 0);
+            string website = cfgTb.GetValue("KEY", 0).TrimEnd('\n');
             string openWebsiteAction = string.Empty;
             if (userData.TryGetValue(userKey,out string url))
             {
@@ -28,7 +30,7 @@ namespace Web_Auto_Fill_Tool
             }
             else
             {
-                openWebsiteAction = string.Format(PyModule.OPEN_WEBSITE, key);
+                openWebsiteAction = string.Format(PyModule.OPEN_WEBSITE, website);
             }
 
             StringBuilder actions = new StringBuilder();
@@ -117,6 +119,10 @@ namespace Web_Auto_Fill_Tool
             {
                 GenerateClear(bd, key, key2, action, by, aliasKey, userData);
             }
+            else if (action == "get_text")
+            {
+                GenerateGetText(bd, key, key2, action, by, aliasKey, userData);
+            }
             else if(action == "get_attr")
             {
                 GenerateGetAttr(bd, key, key2, action, by, aliasKey, userData);
@@ -133,130 +139,230 @@ namespace Web_Auto_Fill_Tool
             {
                 GenerateSwitchToWindow(bd, key, key2, action, by, aliasKey, userData);
             }
+            else if(action == "local_find_all")
+            {
+                GenerateLocalFindAll(bd, key, key2, action, by, aliasKey, userData);
+            }
+            else if(action == "local_for_each")
+            {
+                GenerateLocalForeach(bd, key, key2, action, by, aliasKey, userData);
+            }
+            else if(action == "begin_func")
+            {
+                GenerateBeginFunc(bd, key, key2, action, by, aliasKey, userData);
+            }
+            else if(action == "end_func")
+            {
+                GenerateEndFunc(bd, key, key2, action, by, aliasKey, userData);
+            }
         }
 
-
+        private static void AppendScript(StringBuilder bd,string module)
+        {
+            if(pre_tab.Length > 0)
+            {
+                string append = module.Replace("\n", "\n    ");
+                bd.Append(append);
+            }
+            else
+            {
+                bd.Append(module);
+            }
+        }
 
         private static void GenerateClear(StringBuilder bd, string key, string key2, string action,
-    string by, string aliasKey, Dictionary<string, string> userData)
+string by, string aliasKey, Dictionary<string, string> userData)
         {
-            bd.Append(PyModule.CLEAR);
+            string s = PyModule.CLEAR;
+            AppendScript(bd, s);
         }
 
         private static void GenerateSleep(StringBuilder bd, string key, string key2, string action,
-            string by, string aliasKey, Dictionary<string, string> userData)
+string by, string aliasKey, Dictionary<string, string> userData)
         {
-            bd.AppendFormat(PyModule.SLEEP,key2);
+            string s = string.Format(PyModule.SLEEP, key2);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.SLEEP,key2);
         }
 
-            private static void GenerateGlobalFind(StringBuilder bd, string key, string key2, string action,
-            string by, string aliasKey, Dictionary<string, string> userData)
+        private static void GenerateGlobalFind(StringBuilder bd, string key, string key2, string action,
+string by, string aliasKey, Dictionary<string, string> userData)
         {
-
-            bd.AppendFormat(PyModule.GLOBAL_FIND_ELEMENT, by, key);
+            string s = string.Format(PyModule.GLOBAL_FIND_ELEMENT, by, key);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.GLOBAL_FIND_ELEMENT, by, key);
         }
 
         private static void GenerateGlobalFindAt(StringBuilder bd, string key, string key2, string action,
-            string by, string aliasKey, Dictionary<string, string> userData)
+ string by, string aliasKey, Dictionary<string, string> userData)
         {
-
-            bd.AppendFormat(PyModule.GLOBAL_FIND_ELEMENT_AT_INDEX, by, key, key2);
+            string s = string.Format(PyModule.GLOBAL_FIND_ELEMENT_AT_INDEX, by, key, key2);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.GLOBAL_FIND_ELEMENT_AT_INDEX, by, key, key2);
         }
 
-        private static void GenerateLocalFind(StringBuilder bd, string key, string key2, string action,
-    string by, string aliasKey, Dictionary<string, string> userData)
+    private static void GenerateLocalFind(StringBuilder bd, string key, string key2, string action,
+string by, string aliasKey, Dictionary<string, string> userData)
         {
-
-            bd.AppendFormat(PyModule.LOCAL_FIND_ELEMENT, by, key);
+            string s = string.Format(PyModule.LOCAL_FIND_ELEMENT, by, key);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.LOCAL_FIND_ELEMENT, by, key);
         }
 
         private static void GenerateLocalFindAt(StringBuilder bd, string key, string key2, string action,
             string by, string aliasKey, Dictionary<string, string> userData)
         {
-
-            bd.AppendFormat(PyModule.LOCAL_FIND_ELEMENT_AT_INDEX, by, key, key2);
+            string s = string.Format(PyModule.LOCAL_FIND_ELEMENT_AT_INDEX, by, key, key2);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.LOCAL_FIND_ELEMENT_AT_INDEX, by, key, key2);
         }
 
         private static void GenerateElementClick(StringBuilder bd, string key, string key2, string action,
-            string by, string aliasKey,Dictionary<string,string> userData)
+string by, string aliasKey,Dictionary<string,string> userData)
         {
-            bd.Append(PyModule.ELEMENT_CLICK);
+            string s = PyModule.ELEMENT_CLICK;
+            AppendScript(bd, s);
+            //bd.Append(PyModule.ELEMENT_CLICK);
         }
 
         private static void GenerateElementSendKeys(StringBuilder bd, string key, string key2, string action,
-    string by, string aliasKey, Dictionary<string, string> userData)
+string by, string aliasKey, Dictionary<string, string> userData)
         {
             if (userData.TryGetValue(aliasKey, out string send_key))
             {
-                bd.AppendFormat(PyModule.ELEMENT_SENDKEYS, send_key);
+                string s = string.Format(PyModule.ELEMENT_SENDKEYS, send_key);
+                AppendScript(bd, s);
+                //bd.AppendFormat(PyModule.ELEMENT_SENDKEYS, send_key);
             }
             else
             {
-                bd.AppendFormat(PyModule.ELEMENT_SENDKEYS, key);
+                string s = string.Format(PyModule.ELEMENT_SENDKEYS, key);
+                AppendScript(bd, s);
+                //bd.AppendFormat(PyModule.ELEMENT_SENDKEYS, key);
             }
         }
 
         private static void GenerateGlobalWait(StringBuilder bd, string key, string key2, string action,
-            string by, string aliasKey, Dictionary<string, string> userData)
+ string by, string aliasKey, Dictionary<string, string> userData)
         {
             float time = key2.Equals(string.Empty) ? 2 : float.Parse(key2);
-            bd.AppendFormat(PyModule.GLOBAL_WAIT_ELEMENT, by, key, time);
+            string s = string.Format(PyModule.GLOBAL_WAIT_ELEMENT, by, key, time);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.GLOBAL_WAIT_ELEMENT, by, key, time);
         }
         private static void GenerateGlobalWaitAt(StringBuilder bd, string key, string key2, string action,
-    string by, string aliasKey, Dictionary<string, string> userData)
+ string by, string aliasKey, Dictionary<string, string> userData)
         {
             float time = key2.Equals(string.Empty) ? 2 : float.Parse(key2);
-            bd.AppendFormat(PyModule.GLOBAL_WAIT_ELEMENT_AT_INDEX, by, key, time, key2);
+            string s = string.Format(PyModule.GLOBAL_WAIT_ELEMENT_AT_INDEX, by, key, time, key2);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.GLOBAL_WAIT_ELEMENT_AT_INDEX, by, key, time, key2);
         }
 
         private static void GenerateLocalWait(StringBuilder bd, string key, string key2, string action,
     string by, string aliasKey, Dictionary<string, string> userData)
         {
             float time = key2.Equals(string.Empty) ? 2 : float.Parse(key2);
-            bd.AppendFormat(PyModule.LOCAL_WAIT_ELEMENT, by, key, time);
+            string s = string.Format(PyModule.LOCAL_WAIT_ELEMENT, by, key, time);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.LOCAL_WAIT_ELEMENT, by, key, time);
         }
 
         private static void GenerateLocalWaitAt(StringBuilder bd, string key, string key2, string action,
 string by, string aliasKey, Dictionary<string, string> userData)
         {
             float time = key2.Equals(string.Empty) ? 2 : float.Parse(key2);
-            bd.AppendFormat(PyModule.LOCAL_WAIT_ELEMENT_AT_INDEX, by, key, time, key2);
+            string s = string.Format(PyModule.LOCAL_WAIT_ELEMENT_AT_INDEX, by, key, time, key2);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.LOCAL_WAIT_ELEMENT_AT_INDEX, by, key, time, key2);
         }
 
         private static void GenerateSwitchToFrame(StringBuilder bd, string key, string key2, string action,
-    string by, string aliasKey, Dictionary<string, string> userData)
+string by, string aliasKey, Dictionary<string, string> userData)
         {
-            bd.Append(PyModule.SWITCH_TO_FRAME);
+            string s = PyModule.SWITCH_TO_FRAME;
+            AppendScript(bd, s);
+            //bd.Append(PyModule.SWITCH_TO_FRAME);
         }
         private static void GenerateWaitWindow(StringBuilder bd, string key, string key2, string action,
 string by, string aliasKey, Dictionary<string, string> userData)
         {
-            bd.AppendFormat(PyModule.WAIT_WINDOW, key, key2);
+            string s = string.Format(PyModule.WAIT_WINDOW, key, key2);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.WAIT_WINDOW, key, key2);
         }
 
         private static void GenerateSwitchToWindow(StringBuilder bd, string key, string key2, string action,
-    string by, string aliasKey, Dictionary<string, string> userData)
+string by, string aliasKey, Dictionary<string, string> userData)
         {
-            bd.AppendFormat(PyModule.SWITCH_TO_WINDOW, key);
+            string s = string.Format(PyModule.SWITCH_TO_WINDOW, key);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.SWITCH_TO_WINDOW, key);
         }
-
 
         private static void GenerateSwitchToDefault(StringBuilder bd, string key, string key2, string action,
 string by, string aliasKey, Dictionary<string, string> userData)
         {
-            bd.Append(PyModule.SWITCH_TO_DEFAULT);
+            string s = PyModule.SWITCH_TO_DEFAULT;
+            AppendScript(bd, s);
+            //bd.Append(PyModule.SWITCH_TO_DEFAULT);
+        }
+
+        private static void GenerateGetText(StringBuilder bd, string key, string key2, string action,
+string by, string aliasKey, Dictionary<string, string> userData)
+        {
+            string s = PyModule.ELEMENT_GET_TEXT;
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.ELEMENT_GET_ATTR,key,key2);
         }
 
         private static void GenerateGetAttr(StringBuilder bd, string key, string key2, string action,
 string by, string aliasKey, Dictionary<string, string> userData)
         {
-            bd.AppendFormat(PyModule.ELEMENT_GET_ATTR,key,key2);
+            string s = string.Format(PyModule.ELEMENT_GET_ATTR, key, key2);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.ELEMENT_GET_ATTR,key,key2);
         }
 
         private static void GenerateOutput(StringBuilder bd, string key, string key2, string action,
 string by, string aliasKey, Dictionary<string, string> userData)
         {
-            bd.AppendFormat(PyModule.OUT_PUT_SEARCH_RESULT,key);
+            string s = string.Format(PyModule.OUT_PUT_SEARCH_RESULT, key);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.OUT_PUT_SEARCH_RESULT,key);
+        }
+
+
+        private static void GenerateLocalFindAll(StringBuilder bd, string key, string key2, string action,
+string by, string aliasKey, Dictionary<string, string> userData)
+        {
+            string s = string.Format(PyModule.LOCAL_FIND_ELEMENT_ALL, key);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.LOCAL_FIND_ELEMENT_ALL, key);
+        }
+
+        private static void GenerateLocalForeach(StringBuilder bd, string key, string key2, string action,
+string by, string aliasKey, Dictionary<string, string> userData)
+        {
+            string s = string.Format(PyModule.LOCAL_FOR_EACH, key);
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.LOCAL_FOR_EACH, key);
+        }
+
+        private static void GenerateBeginFunc(StringBuilder bd, string key, string key2, string action,
+string by, string aliasKey, Dictionary<string, string> userData)
+        {
+            string s = PyModule.BEGIN_FUNC;
+            AppendScript(bd, s);
+            //bd.AppendFormat(PyModule.BEGIN_FUNC);
+            pre_tab = pre_tab + "    ";
+        }
+
+        private static void GenerateEndFunc(StringBuilder bd, string key, string key2, string action,
+string by, string aliasKey, Dictionary<string, string> userData)
+        {
+            if (pre_tab.Length > 4)
+                pre_tab.Remove(pre_tab.Length - 4, 4);
         }
 
     }

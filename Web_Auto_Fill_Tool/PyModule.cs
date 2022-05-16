@@ -133,6 +133,32 @@ if result == 0:
         result -= 1 
 ";
 
+        public static string LOCAL_FIND_ELEMENT_ALL = @"
+if result == 0:
+    try:
+        all_elements = element.find_elements(By.{0}, '{1}')
+    except (exceptions.NoSuchElementException):
+        err_str += '\nFIND--没有找到控件  {{0}}={{1}}'.format(By.{0}, '{1}')
+        result -= 1 
+";
+
+        public static string LOCAL_FOR_EACH = @"
+if result == 0:
+    try:
+        all_elements = element.find_elements(By.{0}, '{1}')
+        for element in all_elements:
+            func(element)
+    except (exceptions.NoSuchElementException):
+        err_str += '\nFIND--没有找到控件  {{0}}={{1}}'.format(By.{0}, '{1}')
+        result -= 1 
+";
+
+        public static string BEGIN_FUNC = @"
+def func(element):
+    global result
+    global err_str
+";
+
         public static string SWITCH_TO_FRAME = @"
 if result == 0:
     dr.switch_to.frame(element)     
@@ -170,10 +196,16 @@ if result == 0:
     element.send_keys('{0}')
 ";
 
+        public static string ELEMENT_GET_TEXT = @"  
+if result == 0:
+    text = element.text
+    web_search_result += '{1}'.format(str=text)
+";
+
         public static string ELEMENT_GET_ATTR = @"
 if result == 0:
-        attr = element.get_attribute('{0}')
-        web_search_result += '{1}'.format(attr=attr)
+    attr = element.get_attribute('{0}')
+    web_search_result += '{1}'.format(str=attr)
 ";
 
         public static string OUT_PUT_SEARCH_RESULT = @"
